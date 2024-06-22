@@ -2,6 +2,8 @@
 
 <https://github.com/sorasora2005/sns_django_react_backend>
 
+## 追加したい機能はissueに書いて
+
 ## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
