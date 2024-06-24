@@ -11,20 +11,7 @@ export const postCreateProfile = (newProfile) => {
         },
         body: JSON.stringify(newProfile)
     })
-    .then(res => {
-        if (!res.ok) {
-            return res.json().then(data => Promise.reject({
-                status: res.status,
-                statusText: res.statusText,
-                errorMessage: data.message
-            }));
-        }
-        return res.json();
-    })
-    .catch(error => {
-        console.error('Error making a POST request:', error);
-        return Promise.reject(error);
-    });
+    .then(res => res.json());
 };
 
 // 詳細作成＆修正用

@@ -11,7 +11,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Avatar from '@mui/material/Avatar';
-import { postCreateProfile, updateProfile, getProfileList, patchCheckProfile, deleteProfile } from "../../common/api/profile";
+import { postCreateProfile, updateProfile, getProfileList, patchCheckProfile, deleteProfile } from "../../common/api/profile.js";
 import axios from 'axios';
 
 
@@ -67,12 +67,11 @@ const ProfileComponent = () => {
         handleDialogClose();
     };
 
-    const handleCreate = () => {
+    
+
+    const handleCreate = async () => {
         const newProfile = {
-            name: newProfileName,
-            checked: false,
-            items: 0,
-            age: 0,
+            name: newProfileName
         };
         console.log(newProfile)
         postCreateProfile(newProfile)
@@ -150,7 +149,7 @@ const ProfileComponent = () => {
     return (
         <Container maxWidth="xs">
             <Box display="flex" justifyContent="space-between" mt={4} mb={4}>
-                <TextField label="名前" variant="outlined" size="small" value={newProfileName} onChange={handleSetProfile} />
+                <TextField label="名前" variant="outlined" size="small" onChange={handleSetProfile} />
                 <Button variant="contained" color="primary" onClick={handleCreate}>作成</Button>
             </Box>
             <FormGroup>
@@ -172,7 +171,7 @@ const ProfileComponent = () => {
                         <label htmlFor={`file-input-${profile.id}`}>
                             <Avatar
                                 alt="Avatar"
-                                src={`${process.env.REACT_APP_MEDIA_URL}${profile.image}`}
+                                src={`${profile.image}`}
                                 style={{ cursor: 'pointer', width: 40, height: 40, marginLeft: 'auto' }}
                             />
                         </label>
