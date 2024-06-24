@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import FormGroup from '@mui/material/FormGroup';
@@ -22,6 +22,7 @@ const ProfileComponent = () => {
     const [newProfileName, setNewProfileName] = useState('');
     const [originalProfile, setOriginalProfile] = useState(null);
     const [changedFields, setChangedFields] = useState({});
+    const newlyAddedProfileRef = useRef(null);
 
     useEffect(() => {
         getProfileList().then(profiles => {
@@ -57,6 +58,12 @@ const ProfileComponent = () => {
         setSelectedProfile(null);
     };
 
+    const scrollToNewProfile = () => {
+        if (newlyAddedProfileRef.current) {
+            newlyAddedProfileRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    };
+
     const handleDialogSave = () => {
         if (Object.keys(changedFields).length > 0) {
             updateProfile({ ...changedFields, id: selectedProfile.id });
@@ -85,6 +92,9 @@ const ProfileComponent = () => {
             .then(createdProfile => {
                 // APIからの応答をプロファイルリストに追加
                 setProfileList(prevProfiles => [...prevProfiles, createdProfile]);
+                setTimeout(() => {
+                    scrollToNewProfile();
+                }, 0);
                 setNewProfileName(''); // 名前入力フィールドをリセット
             })
             .catch(error => {
@@ -172,7 +182,8 @@ const ProfileComponent = () => {
             </Box>
             <FormGroup>
                 {profileList.map((profile) => (
-                    <Box key={profile.id} display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                    <Box key={profile.id} display="flex" justifyContent="space-between" alignItems="center" mb={1}
+                    ref={profile.id === profileList[profileList.length - 1].id ? newlyAddedProfileRef : null}>
                         <Box flexGrow={1} mr={2}>
                             <FormControlLabel
                                 control={<Checkbox value={profile.id} onChange={handleCheck} checked={profile.checked || false} />}
