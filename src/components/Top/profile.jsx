@@ -20,6 +20,8 @@ const ProfileComponent = () => {
     const [selectedProfile, setSelectedProfile] = useState(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [newProfileName, setNewProfileName] = useState('');
+    const [originalProfile, setOriginalProfile] = useState(null);
+    const [changedFields, setChangedFields] = useState({});
 
     useEffect(() => {
         getProfileList().then(profiles => {
@@ -45,6 +47,8 @@ const ProfileComponent = () => {
 
     const handleEdit = (profile) => {
         setSelectedProfile(profile);
+        setOriginalProfile(profile);
+        setChangedFields({});
         setIsDialogOpen(true);
     };
 
@@ -54,27 +58,30 @@ const ProfileComponent = () => {
     };
 
     const handleDialogSave = () => {
-        if (selectedProfile) {
-            updateProfile(selectedProfile);
-            const list = profileList.map(value => {
-                if (value.id === selectedProfile.id) {
-                    return selectedProfile;
+        if (Object.keys(changedFields).length > 0) {
+            updateProfile({ ...changedFields, id: selectedProfile.id });
+            const list = profileList.map(profile => {
+                if (profile.id === selectedProfile.id) {
+                    return { ...profile, ...changedFields };
                 }
-                return value;
+                return profile;
             });
             setProfileList(list);
+            setChangedFields({});
         }
         handleDialogClose();
     };
-
+    
     
 
     const handleCreate = async () => {
         const newProfile = {
             name: newProfileName
         };
-        console.log(newProfile)
-        postCreateProfile(newProfile)
+        if (!newProfileName.trim()) {
+            alert('名前を入力してください');
+        } else {
+            postCreateProfile(newProfile)
             .then(createdProfile => {
                 // APIからの応答をプロファイルリストに追加
                 setProfileList(prevProfiles => [...prevProfiles, createdProfile]);
@@ -85,6 +92,7 @@ const ProfileComponent = () => {
                 console.error('Failed to create profile:', error);
                 alert('プロファイルの作成に失敗しました。'); // ユーザーにエラーを通知
             });
+        };
     };
     
 
@@ -94,7 +102,17 @@ const ProfileComponent = () => {
             ...prevProfile,
             [name]: value
         }));
+        if (originalProfile[name] !== value) {
+            setChangedFields(prev => ({ ...prev, [name]: value }));
+        } else {
+            setChangedFields(prev => {
+                const newState = { ...prev };
+                delete newState[name];
+                return newState;
+            });
+        }
     };
+    
 
     const handleSetProfile = (e) => {
         setNewProfileName(e.target.value);

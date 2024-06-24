@@ -15,15 +15,15 @@ export const postCreateProfile = (newProfile) => {
 };
 
 // 詳細作成＆修正用
-export const updateProfile = (profile) => {
-    const url = new URL(`user_profile/${profile.id}/`, originUrl);
+export const updateProfile = (changedprofile) => {
+    const url = new URL(`user_profile/${changedprofile.id}/`, originUrl);
     return fetch(url.href, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(profile)
+        body: JSON.stringify(changedprofile)
     })
     .then(res => res.json());
 };
