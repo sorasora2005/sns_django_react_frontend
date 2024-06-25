@@ -1,0 +1,43 @@
+.image-container {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 10;
+    display: flex;
+    overflow-y: auto; /* スクロールを許可 */
+    transition: background-color 0.5s ease; /* 背景色の変化にアニメーションを適用 */
+  }
+
+.container {
+    width: 80%; /* または実際のデザインに合わせた幅 */
+    max-width: 600px; /* 最大幅を設定する場合 */
+    padding: 300px;
+    position: relative;
+}
+
+
+.hover-zoom {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease; /* 拡大時のアニメーション設定 */
+    z-index: 12;
+}
+  
+.hover-zoom:hover {
+    transform: scale(5); 
+}
+
+@keyframes zoomInOut {
+    0%, 100% {
+      transform: scale(1); /* アニメーションの開始と終了で元のサイズ */
+    }
+    50% {
+      transform: scale(5); /* アニメーションの中間で最大拡大 */
+    }
+  }
+  
+  .expand-zoom-animate {
+    animation: zoomInOut 3s ease-in-out; /* アニメーションの適用 */
+  }
+  
